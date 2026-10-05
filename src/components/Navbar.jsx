@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   FiMenu, FiX, FiBell, FiUser, FiLogOut,
-  FiHome, FiPackage,
+  FiHome, FiPackage, FiPlusSquare
 } from 'react-icons/fi';
 
 export default function Navbar({ onMenuToggle, menuOpen }) {
@@ -42,19 +42,16 @@ export default function Navbar({ onMenuToggle, menuOpen }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+    <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
+        <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <span
-              className="text-white text-xs font-bold px-2 py-1 rounded"
-              style={{ backgroundColor: '#0d2d1e' }}
-            >
-              Px
+            <span className="text-[#0D6A46] bg-green-50 p-1 rounded">
+              <FiPlusSquare size={20} fill="currentColor" className="text-white" />
             </span>
-            <span className="font-semibold text-gray-900 text-sm hidden sm:block">Pathway</span>
+            <span className="font-semibold text-gray-900 text-base hidden sm:block">Pathway</span>
           </Link>
 
           {/* Desktop nav */}

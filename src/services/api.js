@@ -322,22 +322,46 @@ export const adminApi = {
     } catch {}
 
     const availableItems = inventory.filter((i) => i.status === 'available').length;
+    const lowStockItems = inventory.filter((i) => i.status === 'low_stock').length;
+    const outOfStockItems = inventory.filter((i) => i.status === 'out_of_stock').length;
+
     const activeOrders = orders.filter((o) => ['pending', 'confirmed', 'preparing', 'out_for_delivery'].includes(o.status)).length;
     const verifiedPharmacies = localPharmacies.filter((p) => p.verified).length;
+    const pendingPharmacies = localPharmacies.filter((p) => !p.verified);
 
     return {
       stats: {
         totalMedicines: localMedicines.length,
         totalPharmacies: localPharmacies.length,
         verifiedPharmacies,
-        pendingVerifications: localPharmacies.length - verifiedPharmacies,
+        pendingVerifications: pendingPharmacies.length,
+        pendingPharmaciesList: pendingPharmacies,
         availableInventoryItems: availableItems,
+        lowStockItems,
+        outOfStockItems,
+        totalInventoryRecords: inventory.length,
         totalOrders: orders.length,
         activeOrders,
         totalUsers: localUsers.length,
         registeredSuppliers: 0,
-        recentOrders: orders.slice(0, 5) // Return some recent orders for the dashboard preview
+        recentOrders: orders.slice(0, 10), // Return up to 10 recent orders
+        pharmaciesList: localPharmacies,
       },
     };
   },
+
+  verifyPharmacy: async (id) => {
+    await delay(300);
+    let localPharmacies = pharmacies;
+    try {
+      const p = localStorage.getItem('pathway_pharmacies');
+      if (p) localPharmacies = JSON.parse(p);
+    } catch {}
+    const updated = localPharmacies.map((ph) =>
+      ph.id === id ? { ...ph, verified: true } : ph
+    );
+    localStorage.setItem('pathway_pharmacies', JSON.stringify(updated));
+    return { success: true };
+  },
 };
+
